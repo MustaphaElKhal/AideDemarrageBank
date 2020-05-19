@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col">
+    <section>
+      <div class="row">
+        <div class="col-md-9">
+          <a>LIST DES Utilisateurs</a>
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-primary btn-lg" (click)="redirectNewUserPage()">Ajouter un utilisateur</button>
+        </div>
+      </div>
+    </section>
+    <section class="main">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Pseudo</th>
+            <th>Adresse</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of utilisateurs">
+            <td>{{u.id}}</td>
+            <td>{{u.username}}</td>
+            <td>{{u.address}}</td>
+            <td>{{u.email}}</td>
+            <button type="button" class="btn btn-success">Editer</button>
+            <button type="button" class="btn btn-danger" (click)="deleteUser(u)">Supprimer</button>
