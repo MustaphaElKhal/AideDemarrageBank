@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class UserDetailComponent implements OnInit {
 
-  utilisateur: User;
+  utilisateur: User = null;
   userForm: FormGroup;
   constructor(private userService: UserService,
               private router: Router) { }
@@ -30,16 +30,34 @@ export class UserDetailComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.valid) {
+      if (this.utilisateur == null) {
       this.utilisateur = new User(
         null,
-        this.userForm.controls.username.value,
-        this.userForm.controls.address.value,
-        this.userForm.controls.email.value,
+        this.userForm.controls['username'].value,
+        this.userForm.controls['address'].value,
+        this.userForm.controls['email'].value,
       );
       this.userService.saveUser(this.utilisateur);
+    }
+  } else {
+      this.onUpdate();
     }
     this.userForm.reset();
     this.router.navigate(['/user']);
   }
+
+  /**
+   * cette methode effectue un SaveOrUpdate selon l'id
+   */
+
+  onUpdate() {
+      this.utilisateur = new User(
+        this.utilisateur.id,
+        this.userForm.controls['username'].value,
+        this.userForm.controls['address'].value,
+        this.userForm.controls['email'].value,
+      );
+      this.userService.updateUser(this.utilisateur);
+    }
 
 }

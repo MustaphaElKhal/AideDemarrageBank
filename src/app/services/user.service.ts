@@ -37,5 +37,14 @@ export class UserService {
       USERS.splice(idx, 1);
     }
   }
+
+updateUser(user: User) {
+  let idx;
+  idx = USERS.indexOf(user);
+  if(idx >= 0) {
+    USERS.splice(idx, 1, user);
+  }
+}
+
   constructor() { }
 }
