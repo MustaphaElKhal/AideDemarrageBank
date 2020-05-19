@@ -2,7 +2,7 @@ import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-detail',
@@ -13,10 +13,19 @@ export class UserDetailComponent implements OnInit {
 
   utilisateur: User = null;
   userForm: FormGroup;
+  id: number;
+  private sub: any;
+
   constructor(private userService: UserService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.sub = this.route.params.subscribe(params => {
+      this.id = params['id'];
+    });
+
     this.userForm = new FormGroup({
       username: new FormControl('', Validators.required),
       address: new FormControl('', Validators.required),
@@ -26,6 +35,15 @@ export class UserDetailComponent implements OnInit {
       ]
       )
     });
+
+    if (this.id) {
+      this.utilisateur = this.userService.findUserById(this.id);
+      this.userForm.patchValue ({
+        username: this.utilisateur.username,
+        address: this.utilisateur.address,
+        email: this.utilisateur.email,
+      });
+    }
   }
 
   onSubmit() {
@@ -38,13 +56,13 @@ export class UserDetailComponent implements OnInit {
         this.userForm.controls['email'].value,
       );
       this.userService.saveUser(this.utilisateur);
-    }
-  } else {
+    } else {
       this.onUpdate();
     }
+  }
     this.userForm.reset();
     this.router.navigate(['/user']);
-  }
+}
 
   /**
    * cette methode effectue un SaveOrUpdate selon l'id
@@ -58,6 +76,10 @@ export class UserDetailComponent implements OnInit {
         this.userForm.controls['email'].value,
       );
       this.userService.updateUser(this.utilisateur);
+    }
+
+    redirectUserPage() {
+      this.router.navigate(['/user']);
     }
 
 }

@@ -1,6 +1,6 @@
+import { User } from './../models/user';
 import { USERS } from './../data/usersData';
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -38,13 +38,38 @@ export class UserService {
     }
   }
 
-updateUser(user: User) {
-  let idx;
-  idx = USERS.indexOf(user);
-  if(idx >= 0) {
-    USERS.splice(idx, 1, user);
+  updateUser(user: User) {
+    // tslint:disable-next-line: prefer-const
+    let oldUser = this.findUserById(user.id);
+    let idx;
+    idx = USERS.indexOf(oldUser);
+    if (idx >= 0) {
+      USERS.splice(idx, 1, user);
+    }
   }
-}
+
+  /*
+  findUserById(id: number) {
+    USERS.forEach(u => {
+      if(u.id === id) {
+      return u;
+      }
+    });
+  }
+  */
+
+  findUserById(id: number): User {
+    let currentUser: User;
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < USERS.length; i++) {
+      currentUser = USERS[i];
+      // tslint:disable-next-line: triple-equals
+      if (currentUser.id == id) {
+        return currentUser;
+      }
+    }
+    return undefined;
+  }
 
   constructor() { }
 }

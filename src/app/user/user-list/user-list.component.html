@@ -26,5 +26,5 @@
             <td>{{u.username}}</td>
             <td>{{u.address}}</td>
             <td>{{u.email}}</td>
-            <button type="button" class="btn btn-success">Editer</button>
+            <button type="button" class="btn btn-success" (click)="editUser(u)">Editer</button>
             <button type="button" class="btn btn-danger" (click)="deleteUser(u)">Supprimer</button>
